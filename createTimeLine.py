@@ -20,23 +20,22 @@ class GraphPlotterApp:
 
         tk.Label(master, text="Stapelbredd (vid val av stapeldiagram):").grid(row=0, column=0, sticky=tk.W)
         tk.Scale(master, from_=0.01, to=0.5, resolution=0.01, variable=self.width_var, orient=tk.HORIZONTAL,
-                 length=200, command=self.update_graph).grid(row=0, column=1)
+                 length=200, command=self.update_graph).grid(row=0, column=1, sticky=tk.W)
 
         tk.Label(master, text="Tidskompensering:").grid(row=1, column=0, sticky=tk.W)
         tk.Scale(master, from_=0, to=24, resolution=1, variable=self.hours_var, orient=tk.HORIZONTAL,
-                 length=200, command=self.update_graph).grid(row=1, column=1)
-
-        tk.Button(master, text="Välj fil", command=self.choose_file).grid(row=2, column=0, columnspan=2)
+                 length=200, command=self.update_graph).grid(row=1, column=1, sticky=tk.W)
 
         tk.Label(master, text="Fil med data:").grid(row=3, column=0, sticky=tk.W)
-        tk.Entry(master, textvariable=self.file_path_var, state='readonly', width=30).grid(row=3, column=1, columnspan=2)
+        tk.Entry(master, textvariable=self.file_path_var, state='readonly', width=60).grid(row=3, column=1, sticky=tk.W)
+        tk.Button(master, text="Välj fil", command=self.choose_file).grid(row=3, column=1, sticky=tk.W)
 
         tk.Label(master, text="Typ av diagram:").grid(row=4, column=0, sticky=tk.W)
-        ttk.Combobox(master, values=['bars', 'dots', 'plots'], textvariable=self.graph_type_var).grid(row=4, column=1)
+        ttk.Combobox(master, values=['bars', 'dots', 'plots'], textvariable=self.graph_type_var).grid(row=4, column=1, sticky=tk.W)
         self.graph_type_var.trace_add('write', self.update_graph)
 
         tk.Label(master, text="Val av tidsintervall:").grid(row=5, column=0, sticky=tk.W)
-        ttk.Combobox(master, values=['minutes', 'hours', 'days'], textvariable=self.resample_var).grid(row=5, column=1)
+        ttk.Combobox(master, values=['minutes', 'hours', 'days'], textvariable=self.resample_var).grid(row=5, column=1, sticky=tk.W)
         self.resample_var.trace_add('write', self.update_graph)
 
         self.ax = None
@@ -48,6 +47,9 @@ class GraphPlotterApp:
 
         self.width_var.trace_add('write', self.update_graph)
         self.hours_var.trace_add('write', self.update_graph)
+       # Quit button
+        tk.Button(master, text="Quit", command=master.quit).grid(row=7, column=0, columnspan=2)
+
 
     def choose_file(self):
         file_path = filedialog.askopenfilename(title="Select CSV File", filetypes=[("CSV files", "*.csv")])
