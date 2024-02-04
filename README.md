@@ -1,2 +1,3 @@
 # createTimelineGraph
-A graphical tool for visualizing temporal data stored in a CSV file
+
+The script is a graphical tool for visualizing temporal data stored in a CSV file. It allows users to choose a CSV file containing timestamps and generates a dynamic graph that displays the number of entries per time unit. The user can adjust parameters such as bar width, time adjustment in hours, and select the graph type (bars, dots, or plots). Additionally, there is an option to resample the data based on different time intervals (minutes, hours, or days). The graphical user interface (GUI) provides an interactive experience, enabling real-time updates to the graph as parameters are modified.
