@@ -81,15 +81,12 @@ class GraphPlotterApp:
             return
 
         df = pd.read_csv(file_path, header=None, names=['Dates'], parse_dates=['Dates'])
-        #print(df.head())  # Check the first few rows of the DataFrame
-
         df['Dates'] = pd.to_datetime(df['Dates'])  # Ensure 'Dates' column is in datetime format
-
         df['Dates'] = df['Dates'] + timedelta(hours=self.hours_var.get())
-        #print(df.head())  # Check 'Dates' column after adjusting hours
 
-        first_date = df['Dates'].min().strftime('%Y-%m-%d %H:%M:%S')
-        last_date = df['Dates'].max().strftime('%Y-%m-%d %H:%M:%S')
+        first_date = df['Dates'].min()
+        last_date = df['Dates'].max()
+        date_range = last_date - first_date
 
         df['Count'] = 1
 
@@ -101,7 +98,6 @@ class GraphPlotterApp:
         elif resample_freq == 'days':
             resample_freq = 'D'  # 'D' is the code for days
         df_resampled = df.resample(resample_freq, on='Dates').count()
-        #print(df_resampled.head())  # Check the resampled DataFrame
 
         width = self.width_var.get()
 
@@ -116,10 +112,16 @@ class GraphPlotterApp:
 
         self.ax.set_xlabel(f"Time in {self.resample_var.get()}")
         self.ax.set_ylabel('Number of events')
-        self.ax.set_title(f"Date range: {first_date} - {last_date}")
-        self.ax.xaxis.set_major_formatter(DateFormatter('%H:%M'))
+        self.ax.set_title(f"Date range: {first_date.strftime('%Y-%m-%d %H:%M:%S')} - {last_date.strftime('%Y-%m-%d %H:%M:%S')}")
+
+        # Adjust the DateFormatter based on the date range
+        if date_range > timedelta(days=3):
+            self.ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
+        else:
+            self.ax.xaxis.set_major_formatter(DateFormatter('%H:%M'))
 
         self.canvas.draw()
+
 
     def save_as_jpg(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".jpg", filetypes=[("JPEG files", "*.jpg")])
